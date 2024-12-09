@@ -1,9 +1,42 @@
+use std::collections::HashMap;
 use std::fs;
 use std::ops::Index;
 
 const FILE_PATH: &str = "./input.txt";
 
 fn main() {
+    // diffs();
+    similarity();
+}
+
+fn similarity() {
+    let (list1, list2) = lists();
+    let mut h2: HashMap<i32, i32> = HashMap::new();
+    for elem in list2 {
+        if !h2.contains_key(&elem) {
+            h2.insert(elem, 1);
+        } else {
+            let mut val = h2.get_mut(&elem).unwrap();
+            *val = *val + 1;
+        }
+    }
+
+    let mut h1: HashMap<i32, _> = HashMap::new();
+    for elem in list1 {
+        h1.insert(elem, ());
+    }
+
+    let mut sim_score = 0;
+    for (key, _) in h1.iter() {
+        if h2.contains_key(key) {
+            sim_score += (key * h2.get(key).unwrap());
+        }
+    }
+
+    println!("sim_score {}", sim_score);
+}
+
+fn diffs() {
     let (list1, list2) = lists();
     let list1 = sort_vec(list1.clone());
     let list2 = sort_vec(list2.clone());
